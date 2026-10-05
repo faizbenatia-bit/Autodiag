@@ -19,6 +19,7 @@ import Register from "./pages/Register";
 import Vehicles from "./pages/Vehicles";
 import Diagnosis from "./pages/Diagnosis";
 import DiagnosisHistory from "./pages/DiagnosisHistory";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function NavigationNotification() {
   const location = useLocation();
@@ -50,10 +51,13 @@ function NotificationMessage({ message }) {
   );
 }
 
-function App() {
+function AppContent() {
+  const location = useLocation();
+  const isAdminPage = location.pathname === "/admin";
+
   return (
-    <BrowserRouter>
-      <Navbar />
+    <>
+      {!isAdminPage && <Navbar />}
       <NavigationNotification />
 
       <Routes>
@@ -68,14 +72,27 @@ function App() {
           <Route path="/diagnosis" element={<Diagnosis />} />
           <Route path="/history" element={<DiagnosisHistory />} />
         </Route>
+        <Route element={<ProtectedRoute requiredRole="admin" />}>
+          <Route path="/admin" element={<AdminDashboard />} />
+        </Route>
       </Routes>
 
-      <footer className="app-footer">
-        <div className="app-footer-line" aria-hidden="true" />
-        <p>
-          L&apos;application est réalisée par <span>Fayez BEN ATTIA</span>
-        </p>
-      </footer>
+      {!isAdminPage && (
+        <footer className="app-footer">
+          <div className="app-footer-line" aria-hidden="true" />
+          <p>
+            L&apos;application est réalisée par <span>Fayez BEN ATTIA</span>
+          </p>
+        </footer>
+      )}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }

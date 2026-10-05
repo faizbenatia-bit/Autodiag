@@ -6,6 +6,7 @@ const authRoutes = require("./routes/authRoutes");
 const vehicleRoutes = require("./routes/vehicleRoutes");
 const obdRoutes = require("./routes/obdRoutes");
 const diagnosisRoutes = require("./routes/diagnosisRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 const notFound = require("./middleware/notFoundMiddleware");
 const errorHandler = require("./middleware/errorMiddleware");
 
@@ -22,6 +23,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/obd", obdRoutes);
 app.use("/api/diagnosis", diagnosisRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.get("/", (req, res) => {
     res.status(200).json({

@@ -49,9 +49,12 @@ function Login() {
 
       // Stocker le token pour les prochaines requêtes
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
 
-      // Rediriger vers la page des véhicules
-      navigate("/vehicles", {
+      const destination = response.data.user?.role === "admin"
+        ? "/admin"
+        : "/vehicles";
+      navigate(destination, {
         state: { notification: "Utilisateur connecté avec succès." },
       });
     } catch (err) {

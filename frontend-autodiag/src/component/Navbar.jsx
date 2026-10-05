@@ -5,9 +5,18 @@ function Navbar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const isAuthenticated = Boolean(localStorage.getItem("token"));
+  let user = null;
+
+  try {
+    user = JSON.parse(localStorage.getItem("user") || "null");
+  } catch {
+    user = null;
+  }
+  const isAdmin = user?.role === "admin";
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     navigate("/login", {
       replace: true,
       state: { notification: "Utilisateur déconnecté." },
@@ -35,6 +44,11 @@ function Navbar() {
             </Nav.Link>
             {isAuthenticated && (
               <>
+                {isAdmin && (
+                  <Nav.Link as={Link} to="/admin" active={isActive("/admin")}>
+                    Administration
+                  </Nav.Link>
+                )}
                 <Nav.Link as={Link} to="/vehicles" active={isActive("/vehicles")}>
                   Mes véhicules
                 </Nav.Link>

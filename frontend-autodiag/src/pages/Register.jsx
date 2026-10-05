@@ -29,6 +29,7 @@ function Register() {
       }
 
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       navigate("/vehicles", {
         state: { notification: "Utilisateur connecté avec succès." },
       });
