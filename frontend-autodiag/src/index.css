@@ -1,0 +1,93 @@
+:root {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: #182536;
+  background: #f3f6f9;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  --diag-ink: #182536;
+  --diag-muted: #718096;
+  --diag-blue: #176b87;
+  --diag-blue-dark: #104b61;
+  --diag-lime: #c5e86c;
+  --diag-border: #e3e9ee;
+  --diag-surface: #ffffff;
+  --diag-canvas: #f3f6f9;
+  --diag-shadow: 0 14px 38px rgba(22, 42, 58, 0.07);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--diag-canvas);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--diag-canvas);
+  color: var(--diag-ink);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: var(--diag-blue);
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--diag-blue);
+  --bs-btn-border-color: var(--diag-blue);
+  --bs-btn-hover-bg: var(--diag-blue-dark);
+  --bs-btn-hover-border-color: var(--diag-blue-dark);
+  --bs-btn-active-bg: var(--diag-blue-dark);
+  --bs-btn-active-border-color: var(--diag-blue-dark);
+}
+
+.navigation-notification {
+  position: fixed;
+  top: 88px;
+  right: 24px;
+  z-index: 1080;
+  max-width: min(360px, calc(100vw - 32px));
+  padding: 14px 18px;
+  border: 1px solid #b7dfc4;
+  border-radius: 12px;
+  background: #effaf2;
+  box-shadow: var(--diag-shadow);
+  color: #216e39;
+  font-weight: 600;
+}
+
+.error {
+  color: #b42318;
+  font-weight: 600;
+}
+
+.success {
+  color: #18794e;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
