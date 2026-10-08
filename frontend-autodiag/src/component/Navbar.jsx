@@ -19,7 +19,11 @@ function Navbar() {
     localStorage.removeItem("user");
     navigate("/login", {
       replace: true,
-      state: { notification: "Utilisateur déconnecté." },
+      state: {
+        notification: isAdmin
+          ? "Admin déconnecté."
+          : "Utilisateur déconnecté.",
+      },
     });
   };
 

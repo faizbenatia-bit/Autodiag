@@ -15,6 +15,11 @@ const obdCodeSchema = new mongoose.Schema(
             required: true
         },
 
+        summary: {
+            type: String,
+            trim: true
+        },
+
         system: {
             type: String,
             required: true

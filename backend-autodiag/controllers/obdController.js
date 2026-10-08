@@ -50,6 +50,7 @@ exports.createOBDCode = async (req, res) => {
     try {
         const {
             code,
+            summary,
             description,
             system,
             severity,
@@ -60,6 +61,8 @@ exports.createOBDCode = async (req, res) => {
         if (
             typeof code !== "string" ||
             !code.trim() ||
+            (summary !== undefined &&
+                (typeof summary !== "string" || !summary.trim())) ||
             typeof description !== "string" ||
             !description.trim() ||
             typeof system !== "string" ||
@@ -80,6 +83,7 @@ exports.createOBDCode = async (req, res) => {
 
         const obd = await OBDCode.create({
             code: code.trim().toUpperCase(),
+            summary: typeof summary === "string" ? summary.trim() : description.trim(),
             description: description.trim(),
             system: system.trim(),
             severity,

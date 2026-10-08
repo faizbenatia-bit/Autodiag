@@ -7,15 +7,12 @@ exports.createDiagnosis = async (req, res) => {
   try {
     const {
       vehicleId = req.body.vehicle,
-      symptoms,
       obdCodes,
     } = req.body;
 
     // Vérifier les données obligatoires
     if (
       !vehicleId ||
-      !Array.isArray(symptoms) ||
-      !symptoms.every((symptom) => typeof symptom === "string") ||
       !Array.isArray(obdCodes) ||
       !obdCodes.every((code) => typeof code === "string")
     ) {
@@ -24,9 +21,9 @@ exports.createDiagnosis = async (req, res) => {
       });
     }
 
-    if (symptoms.length === 0 && obdCodes.length === 0) {
+    if (obdCodes.length === 0) {
       return res.status(400).json({
-        message: "Saisissez au moins un symptôme ou un code OBD",
+        message: "Saisissez au moins un code OBD",
       });
     }
 
@@ -43,17 +40,13 @@ exports.createDiagnosis = async (req, res) => {
     }
 
     // Analyser les informations
-    const result = await analyzeVehicle({
-      symptoms,
-      obdCodes,
-    });
+    const result = await analyzeVehicle({ obdCodes });
 
     // Enregistrer le diagnostic
     const diagnosis = await Diagnosis.create({
       user: req.user._id,
       vehicle: vehicle._id,
 
-      symptoms: result.matchedSymptoms,
       obdCodes: result.matchedCodes,
 
       findings: result.findings,
@@ -70,7 +63,6 @@ exports.createDiagnosis = async (req, res) => {
 
       warnings: {
         unknownCodes: result.unknownCodes,
-        unknownSymptoms: result.unknownSymptoms,
       },
       codeDetails: result.codeDetails,
     });

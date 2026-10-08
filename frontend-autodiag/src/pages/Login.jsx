@@ -55,7 +55,11 @@ function Login() {
         ? "/admin"
         : "/vehicles";
       navigate(destination, {
-        state: { notification: "Utilisateur connecté avec succès." },
+        state: {
+          notification: response.data.user?.role === "admin"
+            ? "Admin connecté avec succès."
+            : "Utilisateur connecté avec succès.",
+        },
       });
     } catch (err) {
       // Afficher un message en cas d'erreur

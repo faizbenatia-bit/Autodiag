@@ -98,6 +98,12 @@ exports.login = async (req, res) => {
             });
         }
 
+        if (user.isActive === false) {
+            return res.status(403).json({
+                message: "Ce compte a été désactivé. Contactez l'administrateur."
+            });
+        }
+
         // Générer le token
         const token = generateToken(user._id);
 

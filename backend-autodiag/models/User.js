@@ -28,6 +28,11 @@ const userSchema = new mongoose.Schema(
             type: String,
             enum: ["user", "admin", "mechanic"],
             default: "user"
+        },
+
+        isActive: {
+            type: Boolean,
+            default: true
         }
     },
     {

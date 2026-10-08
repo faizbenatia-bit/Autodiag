@@ -1,0 +1,116 @@
+const vehicleCatalog = {
+  Audi: {
+    A1: ["Essence 1.0 TFSI", "Essence 1.5 TFSI"],
+    A3: ["Essence 1.0 TFSI", "Essence 1.5 TFSI", "Diesel 2.0 TDI", "Hybride rechargeable TFSI e"],
+    Q3: ["Essence 1.5 TFSI", "Diesel 2.0 TDI", "Hybride rechargeable TFSI e"],
+    Q5: ["Essence 2.0 TFSI", "Diesel 2.0 TDI", "Hybride rechargeable TFSI e"],
+  },
+  BMW: {
+    "Série 1": ["Essence 118i", "Essence 120i", "Diesel 118d", "Diesel 120d"],
+    "Série 3": ["Essence 318i", "Essence 320i", "Diesel 318d", "Diesel 320d", "Hybride rechargeable 330e"],
+    X1: ["Essence sDrive18i", "Diesel sDrive18d", "Diesel xDrive20d", "Hybride rechargeable xDrive25e"],
+    X3: ["Essence xDrive20i", "Diesel xDrive20d", "Hybride rechargeable xDrive30e"],
+  },
+  Citroën: {
+    C3: ["Essence 1.2 PureTech", "Diesel 1.5 BlueHDi", "Électrique ë-C3"],
+    "C3 Aircross": ["Essence 1.2 PureTech", "Diesel 1.5 BlueHDi", "Hybride"],
+    C4: ["Essence 1.2 PureTech", "Diesel 1.5 BlueHDi", "Hybride", "Électrique ë-C4"],
+    "C5 Aircross": ["Essence 1.2 PureTech", "Diesel 1.5 BlueHDi", "Hybride rechargeable"],
+  },
+  Dacia: {
+    Sandero: ["Essence SCe 65", "Essence TCe 90", "Bicarburation GPL ECO-G 100"],
+    Duster: ["Essence TCe 130", "Essence TCe 150", "Bicarburation GPL ECO-G 100", "Hybride"],
+    Jogger: ["Essence TCe 110", "Bicarburation GPL ECO-G 100", "Hybride"],
+    Spring: ["Électrique"],
+  },
+  Fiat: {
+    "500": ["Essence 1.0 Hybrid", "Électrique 500e"],
+    Panda: ["Essence 1.0 Hybrid", "Bicarburation GPL"],
+    Tipo: ["Essence 1.0", "Diesel 1.6 Multijet"],
+  },
+  Ford: {
+    Fiesta: ["Essence 1.0 EcoBoost", "Essence 1.0 EcoBoost mHEV", "Diesel 1.5 TDCi"],
+    Puma: ["Essence 1.0 EcoBoost", "Essence 1.0 EcoBoost mHEV"],
+    Focus: ["Essence 1.0 EcoBoost", "Essence 1.0 EcoBoost mHEV", "Diesel 1.5 EcoBlue"],
+    Kuga: ["Essence 1.5 EcoBoost", "Diesel 2.0 EcoBlue", "Hybride", "Hybride rechargeable"],
+  },
+  Hyundai: {
+    i10: ["Essence 1.0 MPI", "Essence 1.2 MPI"],
+    i20: ["Essence 1.0 T-GDi", "Essence 1.2 MPI"],
+    Kona: ["Essence 1.0 T-GDi", "Hybride", "Électrique"],
+    Tucson: ["Essence 1.6 T-GDi", "Diesel 1.6 CRDi", "Hybride", "Hybride rechargeable"],
+  },
+  Kia: {
+    Picanto: ["Essence 1.0 DPI", "Essence 1.2 DPI"],
+    Ceed: ["Essence 1.0 T-GDi", "Essence 1.5 T-GDi", "Diesel 1.6 CRDi"],
+    Niro: ["Hybride", "Hybride rechargeable", "Électrique"],
+    Sportage: ["Essence 1.6 T-GDi", "Diesel 1.6 CRDi", "Hybride", "Hybride rechargeable"],
+  },
+  "Mercedes-Benz": {
+    "Classe A": ["Essence A 180", "Essence A 200", "Diesel A 180 d", "Hybride rechargeable A 250 e"],
+    "Classe C": ["Essence C 200", "Diesel C 220 d", "Hybride rechargeable C 300 e"],
+    GLA: ["Essence GLA 200", "Diesel GLA 200 d", "Hybride rechargeable GLA 250 e"],
+    GLC: ["Essence GLC 200", "Diesel GLC 220 d", "Hybride rechargeable GLC 300 e"],
+  },
+  Nissan: {
+    Micra: ["Essence 1.0 IG-T"],
+    Juke: ["Essence 1.0 DIG-T", "Hybride"],
+    Qashqai: ["Essence 1.3 DIG-T", "Hybride e-POWER"],
+    "X-Trail": ["Essence e-POWER", "Hybride e-4ORCE"],
+  },
+  Opel: {
+    Corsa: ["Essence 1.2", "Diesel 1.5", "Électrique Corsa Electric"],
+    Mokka: ["Essence 1.2 Turbo", "Électrique Mokka Electric"],
+    Astra: ["Essence 1.2 Turbo", "Diesel 1.5", "Hybride rechargeable"],
+    "Grandland": ["Essence 1.2 Turbo", "Hybride", "Hybride rechargeable"],
+  },
+  Peugeot: {
+    208: ["Essence 1.2 PureTech", "Diesel 1.5 BlueHDi", "Hybride", "Électrique E-208"],
+    2008: ["Essence 1.2 PureTech", "Diesel 1.5 BlueHDi", "Hybride", "Électrique E-2008"],
+    308: ["Essence 1.2 PureTech", "Diesel 1.5 BlueHDi", "Hybride rechargeable"],
+    3008: ["Essence 1.2 PureTech", "Diesel 1.5 BlueHDi", "Hybride", "Hybride rechargeable"],
+    5008: ["Essence 1.2 PureTech", "Diesel 1.5 BlueHDi", "Hybride"],
+  },
+  Renault: {
+    Clio: ["Essence SCe", "Essence TCe", "Diesel dCi", "Bicarburation GPL", "Hybride E-Tech"],
+    Captur: ["Essence TCe", "Diesel Blue dCi", "Bicarburation GPL", "Hybride E-Tech", "Hybride rechargeable E-Tech"],
+    Mégane: ["Essence TCe", "Diesel dCi", "Hybride rechargeable E-Tech", "Électrique E-Tech"],
+    Austral: ["Essence mild hybrid", "Hybride full hybrid E-Tech"],
+    Arkana: ["Essence TCe", "Hybride E-Tech"],
+    "Scénic": ["Essence TCe", "Diesel dCi", "Électrique E-Tech"],
+  },
+  Škoda: {
+    Fabia: ["Essence 1.0 MPI", "Essence 1.0 TSI"],
+    Octavia: ["Essence 1.5 TSI", "Diesel 2.0 TDI", "Hybride rechargeable iV"],
+    Kamiq: ["Essence 1.0 TSI", "Essence 1.5 TSI"],
+    Karoq: ["Essence 1.5 TSI", "Diesel 2.0 TDI"],
+    Kodiaq: ["Essence 1.5 TSI", "Diesel 2.0 TDI", "Hybride rechargeable"],
+  },
+  Tesla: {
+    "Model 3": ["Électrique propulsion", "Électrique grande autonomie", "Électrique Performance"],
+    "Model Y": ["Électrique propulsion", "Électrique grande autonomie", "Électrique Performance"],
+  },
+  Toyota: {
+    Yaris: ["Essence 1.0 VVT-i", "Essence 1.5 VVT-i", "Hybride 1.5"],
+    "Yaris Cross": ["Essence 1.5", "Hybride 1.5"],
+    Corolla: ["Essence 1.2 Turbo", "Hybride 1.8", "Hybride 2.0"],
+    "C-HR": ["Essence 1.2 Turbo", "Hybride 1.8", "Hybride 2.0", "Hybride rechargeable"],
+    RAV4: ["Essence 2.0", "Hybride 2.5", "Hybride rechargeable 2.5"],
+  },
+  Volkswagen: {
+    Polo: ["Essence 1.0 MPI", "Essence 1.0 TSI", "Diesel 1.6 TDI"],
+    Golf: ["Essence 1.0 TSI", "Essence 1.5 TSI", "Diesel 2.0 TDI", "Hybride rechargeable eHybrid"],
+    "T-Cross": ["Essence 1.0 TSI", "Essence 1.5 TSI"],
+    "T-Roc": ["Essence 1.0 TSI", "Essence 1.5 TSI", "Diesel 2.0 TDI"],
+    Tiguan: ["Essence 1.5 TSI", "Diesel 2.0 TDI", "Hybride rechargeable eHybrid"],
+    "ID.3": ["Électrique"],
+    "ID.4": ["Électrique"],
+  },
+  Volvo: {
+    XC40: ["Essence mild hybrid", "Hybride rechargeable", "Électrique"],
+    XC60: ["Essence mild hybrid", "Hybride rechargeable"],
+    XC90: ["Essence mild hybrid", "Hybride rechargeable"],
+  },
+};
+
+export default vehicleCatalog;

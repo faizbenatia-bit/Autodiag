@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
 import api from "../api/axios";
+import vehicleCatalog from "../data/vehicleCatalog";
 
 const maximumVehicleYear = new Date().getFullYear() + 1;
+const otherOption = "__other__";
 
 function Vehicles() {
   // Liste des véhicules
@@ -14,6 +16,9 @@ function Vehicles() {
     model: "",
     year: "",
     engine: "",
+    customBrand: "",
+    customModel: "",
+    customEngine: "",
   });
 
   // États de l'interface
@@ -53,10 +58,31 @@ function Vehicles() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setForm((previous) => ({
-      ...previous,
-      [name]: value,
-    }));
+    setForm((previous) => {
+      if (name === "brand") {
+        return {
+          ...previous,
+          brand: value,
+          model: "",
+          engine: "",
+          customBrand: "",
+          customModel: "",
+          customEngine: "",
+        };
+      }
+
+      if (name === "model") {
+        return {
+          ...previous,
+          model: value,
+          engine: "",
+          customModel: "",
+          customEngine: "",
+        };
+      }
+
+      return { ...previous, [name]: value };
+    });
   };
 
   // Supprimer un véhicule
@@ -95,8 +121,18 @@ function Vehicles() {
     try {
       // Envoyer les données au backend
       await api.post("/vehicles", {
-        ...form,
+        brand: form.brand === otherOption ? form.customBrand.trim() : form.brand,
+        model:
+          form.brand === otherOption || form.model === otherOption
+            ? form.customModel.trim()
+            : form.model,
         year: Number(form.year),
+        engine:
+          form.brand === otherOption ||
+          form.model === otherOption ||
+          form.engine === otherOption
+            ? form.customEngine.trim()
+            : form.engine,
       });
 
       // Réinitialiser le formulaire
@@ -105,6 +141,9 @@ function Vehicles() {
         model: "",
         year: "",
         engine: "",
+        customBrand: "",
+        customModel: "",
+        customEngine: "",
       });
 
       // Actualiser la liste
@@ -139,24 +178,74 @@ function Vehicles() {
                 <Form.Group className="mb-3" controlId="brand">
                   <Form.Label>Marque</Form.Label>
                   <Form.Control
+                    as="select"
                     name="brand"
                     value={form.brand}
                     onChange={handleChange}
-                    placeholder="Ex. Renault"
                     required
-                  />
+                  >
+                    <option value="">Sélectionnez une marque</option>
+                    {Object.keys(vehicleCatalog).map((brand) => (
+                      <option key={brand} value={brand}>{brand}</option>
+                    ))}
+                    <option value={otherOption}>Autre marque</option>
+                  </Form.Control>
                 </Form.Group>
+
+                {form.brand === otherOption && (
+                  <Form.Group className="mb-3" controlId="custom-brand">
+                    <Form.Label>Nom de la marque</Form.Label>
+                    <Form.Control
+                      name="customBrand"
+                      value={form.customBrand}
+                      onChange={handleChange}
+                      placeholder="Saisissez la marque"
+                      required
+                    />
+                  </Form.Group>
+                )}
 
                 <Form.Group className="mb-3" controlId="model">
                   <Form.Label>Modèle</Form.Label>
-                  <Form.Control
-                    name="model"
-                    value={form.model}
-                    onChange={handleChange}
-                    placeholder="Ex. Clio"
-                    required
-                  />
+                  {form.brand === otherOption ? (
+                    <Form.Control
+                      name="customModel"
+                      value={form.customModel}
+                      onChange={handleChange}
+                      placeholder="Saisissez le modèle"
+                      required
+                    />
+                  ) : (
+                    <Form.Control
+                      as="select"
+                      name="model"
+                      value={form.model}
+                      onChange={handleChange}
+                      disabled={!form.brand}
+                      required
+                    >
+                      <option value="">Sélectionnez un modèle</option>
+                      {form.brand &&
+                        Object.keys(vehicleCatalog[form.brand]).map((model) => (
+                          <option key={model} value={model}>{model}</option>
+                        ))}
+                      {form.brand && <option value={otherOption}>Autre modèle</option>}
+                    </Form.Control>
+                  )}
                 </Form.Group>
+
+                {form.model === otherOption && form.brand !== otherOption && (
+                  <Form.Group className="mb-3" controlId="custom-model">
+                    <Form.Label>Nom du modèle</Form.Label>
+                    <Form.Control
+                      name="customModel"
+                      value={form.customModel}
+                      onChange={handleChange}
+                      placeholder="Saisissez le modèle"
+                      required
+                    />
+                  </Form.Group>
+                )}
 
                 <Form.Group className="mb-3" controlId="year">
                   <Form.Label>Année</Form.Label>
@@ -173,13 +262,45 @@ function Vehicles() {
 
                 <Form.Group className="mb-3" controlId="engine">
                   <Form.Label>Motorisation <span className="field-optional">(facultatif)</span></Form.Label>
-                  <Form.Control
-                    name="engine"
-                    value={form.engine}
-                    onChange={handleChange}
-                    placeholder="Ex. 1.5 dCi"
-                  />
+                  {form.brand === otherOption || form.model === otherOption ? (
+                    <Form.Control
+                      name="customEngine"
+                      value={form.customEngine}
+                      onChange={handleChange}
+                      placeholder="Ex. 1.5 dCi"
+                    />
+                  ) : (
+                    <Form.Control
+                      as="select"
+                      name="engine"
+                      value={form.engine}
+                      onChange={handleChange}
+                      disabled={!form.model}
+                    >
+                      <option value="">Sélectionnez une motorisation</option>
+                      {(vehicleCatalog[form.brand]?.[form.model] || []).map((engine) => (
+                        <option key={engine} value={engine}>{engine}</option>
+                      ))}
+                      <option value={otherOption}>Autre motorisation</option>
+                    </Form.Control>
+                  )}
                 </Form.Group>
+
+                {form.engine === otherOption && (
+                  <Form.Group className="mb-3" controlId="custom-engine">
+                    <Form.Label>Précisez la motorisation <span className="field-optional">(facultatif)</span></Form.Label>
+                    <Form.Control
+                      placeholder="Ex. 1.5 dCi"
+                      value={form.customEngine}
+                      onChange={(event) =>
+                        setForm((previous) => ({ ...previous, customEngine: event.target.value }))
+                      }
+                    />
+                  </Form.Group>
+                )}
+                <Form.Text className="mb-3">
+                  Les motorisations proposées sont les plus courantes. Vérifiez qu’elles correspondent à l’année de votre véhicule.
+                </Form.Text>
 
                 {error && <Alert variant="danger" role="alert">{error}</Alert>}
                 {success && <Alert variant="success" role="status">{success}</Alert>}

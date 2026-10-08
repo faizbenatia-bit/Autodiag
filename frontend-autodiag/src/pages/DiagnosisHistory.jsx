@@ -227,8 +227,6 @@ function DiagnosisHistory() {
                     </h2>
                     <p>{formatDate(diagnosis.createdAt)}</p>
                     <p>
-                      {diagnosis.symptoms?.length || 0} symptôme(s)
-                      {" · "}
                       {diagnosis.obdCodes?.length || 0} code(s) OBD-II
                     </p>
                   </div>
@@ -270,16 +268,6 @@ function DiagnosisHistory() {
                     {detailError && <Alert variant="danger" role="alert">{detailError}</Alert>}
                     {selectedDiagnosis?._id === diagnosis._id && (
                       <>
-                        {selectedDiagnosis.symptoms?.length > 0 && (
-                          <section>
-                            <h3>Symptômes</h3>
-                            <ul>
-                              {selectedDiagnosis.symptoms.map((symptom, index) => (
-                                <li key={`${symptom}-${index}`}>{symptom}</li>
-                              ))}
-                            </ul>
-                          </section>
-                        )}
                         {selectedDiagnosis.obdCodes?.length > 0 && (
                           <section>
                             <h3>Codes OBD-II</h3>

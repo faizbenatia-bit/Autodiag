@@ -3,60 +3,8 @@ dotenv.config();
 
 const connectDB = require("../config/db");
 
-const OBDCode = require("../models/OBDCode");
 const Symptom = require("../models/Symptom");
 const DiagnosisRule = require("../models/DiagnosisRule");
-
-// Catalogue de codes OBD de démonstration
-const obdCodes = [
-    {
-        code: "P0300",
-        description: "Ratés d'allumage multiples ou aléatoires",
-        system: "Moteur",
-        severity: "high",
-        possibleCauses: [
-            "Bougies",
-            "Bobines",
-            "Injecteurs"
-        ],
-        recommendedChecks: [
-            "Contrôler les bougies",
-            "Vérifier les bobines",
-            "Examiner les injecteurs"
-        ]
-    },
-    {
-        code: "P0420",
-        description: "Efficacité du catalyseur sous le seuil",
-        system: "Échappement",
-        severity: "medium",
-        possibleCauses: [
-            "Catalyseur",
-            "Sonde lambda",
-            "Fuite d'échappement"
-        ],
-        recommendedChecks: [
-            "Vérifier les sondes lambda",
-            "Contrôler les fuites d'échappement"
-        ]
-    },
-    {
-        code: "P0171",
-        description: "Mélange trop pauvre, banc 1",
-        system: "Alimentation moteur",
-        severity: "medium",
-        possibleCauses: [
-            "Prise d'air",
-            "Débitmètre",
-            "Pression de carburant insuffisante"
-        ],
-        recommendedChecks: [
-            "Vérifier les conduites d'admission",
-            "Contrôler les mesures du débitmètre",
-            "Vérifier la pression de carburant"
-        ]
-    }
-];
 
 // Catalogue des symptômes
 const symptoms = [
@@ -135,12 +83,9 @@ const seedDatabase = async () => {
     try {
         await connectDB();
 
-        // Remplacement des données de référence
-        await OBDCode.deleteMany({});
         await Symptom.deleteMany({});
         await DiagnosisRule.deleteMany({});
 
-        await OBDCode.insertMany(obdCodes);
         await Symptom.insertMany(symptoms);
         await DiagnosisRule.insertMany(rules);
 

@@ -34,6 +34,12 @@ const protect = async (req, res, next) => {
             });
         }
 
+        if (user.isActive === false) {
+            return res.status(403).json({
+                message: "Ce compte a été désactivé. Contactez l'administrateur."
+            });
+        }
+
         // Mise à disposition de l'utilisateur pour la suite
         req.user = user;
 

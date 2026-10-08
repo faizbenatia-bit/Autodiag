@@ -1,17 +1,9 @@
 // Importation des hooks React nécessaires
 import { useEffect, useState } from "react";
-import { Alert, Button, Form, InputGroup, Spinner } from "react-bootstrap";
+import { Alert, Button, Form, Spinner } from "react-bootstrap";
 
 // Importation du client Axios configuré
 import api from "../api/axios";
-
-const symptomLabels = {
-  loss_of_power: "Perte de puissance",
-  engine_vibration: "Moteur qui tremble",
-  engine_light: "Voyant moteur",
-  high_fuel_consumption: "Consommation élevée",
-  black_smoke: "Fumée noire",
-};
 
 const severityLabels = {
   low: "Faible",
@@ -21,18 +13,12 @@ const severityLabels = {
   unknown: "À déterminer",
 };
 
-const formatSymptom = (symptom) =>
-  symptomLabels[symptom] ||
-  symptom.replaceAll("_", " ").replace(/^./, (letter) => letter.toUpperCase());
-
 function Diagnosis() {
   // Liste des véhicules de l'utilisateur
   const [vehicles, setVehicles] = useState([]);
 
   // Informations saisies dans le formulaire
   const [vehicleId, setVehicleId] = useState("");
-  const [symptoms, setSymptoms] = useState([]);
-  const [symptomInput, setSymptomInput] = useState("");
   const [obdCodes, setObdCodes] = useState("");
 
   // États de gestion de l'interface
@@ -63,23 +49,6 @@ function Diagnosis() {
     fetchVehicles();
   }, []);
 
-  // Ajouter un symptôme à la liste
-  const handleAddSymptom = () => {
-    const value = symptomInput.trim();
-
-    if (value !== "" && !symptoms.includes(value)) {
-      setSymptoms([...symptoms, value]);
-      setSymptomInput("");
-    }
-  };
-
-  // Supprimer un symptôme
-  const handleRemoveSymptom = (symptomToRemove) => {
-    setSymptoms(
-      symptoms.filter((symptom) => symptom !== symptomToRemove)
-    );
-  };
-
   // Envoyer les informations au backend
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -92,8 +61,8 @@ function Diagnosis() {
       return;
     }
 
-    if (symptoms.length === 0 && obdCodes.trim() === "") {
-      setError("Saisissez au moins un symptôme ou un code OBD-II.");
+    if (obdCodes.trim() === "") {
+      setError("Saisissez au moins un code OBD-II.");
       return;
     }
 
@@ -106,7 +75,6 @@ function Diagnosis() {
     // Données envoyées à l'API
     const diagnosisData = {
       vehicleId,
-      symptoms,
       obdCodes: codes,
     };
 
@@ -117,7 +85,6 @@ function Diagnosis() {
 
       setResult({
         ...response.data,
-        submittedSymptoms: symptoms,
         submittedCodes: codes,
         selectedVehicle: vehicles.find((vehicle) => vehicle._id === vehicleId),
       });
@@ -136,7 +103,7 @@ function Diagnosis() {
       <header className="page-heading">
         <span className="eyebrow mb-2">Analyse guidée</span>
         <h1>Diagnostic automobile</h1>
-        <p>Décrivez les symptômes ou indiquez les codes OBD-II pour obtenir des pistes à vérifier.</p>
+        <p>Saisissez les codes OBD-II du véhicule pour obtenir des pistes à vérifier.</p>
       </header>
 
       <Form className="diagnosis-form" onSubmit={handleSubmit}>
@@ -161,45 +128,14 @@ function Diagnosis() {
           )}
         </Form.Group>
 
-        <Form.Group controlId="symptom">
-          <Form.Label>Symptômes observés <span className="field-optional">(facultatif)</span></Form.Label>
-          <InputGroup>
-            <Form.Control
-              type="text"
-              value={symptomInput}
-              onChange={(e) => setSymptomInput(e.target.value)}
-              placeholder="Ex. : perte de puissance"
-            />
-            <Button type="button" variant="outline-primary" onClick={handleAddSymptom}>
-              Ajouter
-            </Button>
-          </InputGroup>
-        </Form.Group>
-
-        {symptoms.length > 0 && (
-          <ul className="symptom-list" aria-label="Symptômes ajoutés">
-            {symptoms.map((symptom) => (
-              <li key={symptom}>
-                {symptom}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveSymptom(symptom)}
-                  aria-label={`Supprimer ${symptom}`}
-                >
-                  ×
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-
         <Form.Group controlId="obdCodes">
-          <Form.Label>Codes OBD-II <span className="field-optional">(facultatif)</span></Form.Label>
+          <Form.Label>Codes OBD-II</Form.Label>
           <Form.Control
             type="text"
             value={obdCodes}
             onChange={(e) => setObdCodes(e.target.value)}
             placeholder="Ex. : P0300, P0420"
+            required
           />
           <Form.Text className="text-muted">
             Séparez les codes par des virgules si vous en avez plusieurs.
@@ -245,11 +181,6 @@ function Diagnosis() {
               diagnosis.obdCodes?.length > 0
                 ? diagnosis.obdCodes
                 : result.submittedCodes;
-            const displayedSymptoms =
-              result.submittedSymptoms?.length > 0
-                ? result.submittedSymptoms
-                : diagnosis.symptoms || [];
-
             return (
               <>
                 <header className="diagnosis-result-header">
@@ -279,17 +210,6 @@ function Diagnosis() {
                   </p>
                 </section>
 
-                {displayedSymptoms.length > 0 && (
-                  <section className="diagnosis-result-section">
-                    <h3>Symptômes</h3>
-                    <ul>
-                      {displayedSymptoms.map((symptom, index) => (
-                        <li key={`${symptom}-${index}`}>{formatSymptom(symptom)}</li>
-                      ))}
-                    </ul>
-                  </section>
-                )}
-
                 {causes.length > 0 && (
                   <section className="diagnosis-result-section">
                     <h3>Causes possibles</h3>
@@ -315,12 +235,6 @@ function Diagnosis() {
                 {result.warnings?.unknownCodes?.length > 0 && (
                   <p className="diagnosis-result-note">
                     Codes non reconnus : {result.warnings.unknownCodes.join(", ")}
-                  </p>
-                )}
-                {result.warnings?.unknownSymptoms?.length > 0 && (
-                  <p className="diagnosis-result-note">
-                    Symptômes non reconnus :{" "}
-                    {result.warnings.unknownSymptoms.join(", ")}
                   </p>
                 )}
               </>
