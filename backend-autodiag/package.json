@@ -8,7 +8,8 @@
     "dev": "nodemon server.js",
     "seed": "node seed/seedData.js",
     "import-obd-catalog": "node scripts/importObdCatalog.js",
-    "create-admin": "node scripts/createAdmin.js"
+    "create-admin": "node scripts/createAdmin.js",
+    "prestart": "npm run create-admin && npm run import-obd-catalog"
   },
   
   "keywords": [],
